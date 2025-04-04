@@ -59,7 +59,8 @@ function updateCategoriesList() {
   const categoriesList = document.getElementById('categories-list');
   categoriesList.innerHTML = ''; // Clear current list
 
-  // Loop through categories and display them
+  // Loop through categories and displ
+  // ay them
   for (let category in categories) {
     const categoryItem = document.createElement('li');
     categoryItem.innerHTML = `<strong>${category}</strong>: ${categories[category].join(', ')}`;
