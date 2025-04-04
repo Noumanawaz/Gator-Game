@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game - Gator Game</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Gator Game</h1>
+
+    <!-- Creator Tab -->
+    <div id="creator-tab">
+      <div class="creator-inner">
+        <h2>Create Categories and Words</h2>
+
+        <!-- Form to create categories and add words -->
+        <form id="category-form">
+          <label for="category-name">Category Name:</label>
+          <input
+            type="text"
+            id="category-name"
+            placeholder="Enter category name"
+            required
+          />
+
+          <label for="word-input">Word:</label>
+          <input
+            type="text"
+            id="word-input"
+            placeholder="Enter word"
+            required
+          />
+
+          <button type="submit">Add Word to Category</button>
+        </form>
+
+        <!-- Display created categories and words -->
+        <h3>Created Categories</h3>
+        <ul id="categories-list"></ul>
+
+        <!-- Game Configuration Options -->
+        <div class="game-options">
+          <h3>Game Options</h3>
+          
+          <div class="option-group">
+            <label for="score-display">Score Display:</label>
+            <select id="score-display" name="score-display">
+              <option value="dynamic">Show Score Dynamically</option>
+              <option value="end">Calculate Score at End</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Navigation button to play game -->
+        <button
+          id="play-game-btn"
+          onclick="window.location.href='playgame.html'"
+        >
+          Go to Play Game
+        </button>
+      </div>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>

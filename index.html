@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Practice</title>
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        font-family: sans-serif;
+        overflow: hidden;
+      }
+
+      /* Background image layer */
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('./image.png'); /* 👈 replace with your image */
+        background-size: cover;
+        background-position: center;
+        opacity: 0.2; /* 👈 control opacity here */
+        z-index: -1;
+      }
+
+      .center-content {
+        text-align: center;
+        z-index: 1;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #333;
+      }
+
+      .center-button {
+        padding: 12px 24px;
+        font-size: 18px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .center-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center-content">
+      <h2>Gator Game</h2>
+      <button class="center-button" onclick="window.location.href='next.html'">Go to Next Page</button>
+    </div>
+  </body>
+</html>
