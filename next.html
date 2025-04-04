@@ -9,7 +9,6 @@
   <body>
     <h1 style="text-align: center">Gator Game</h1>
 
-    
     <!-- Creator Tab -->
     <div id="creator-tab">
       <div class="creator-inner">
@@ -24,6 +23,16 @@
             placeholder="Enter category name"
             required
           />
+
+          <button type="submit">Add Category</button>
+        </form>
+
+        <!-- Form to add words to an existing category -->
+        <form id="word-form">
+          <label for="category-select">Select Category:</label>
+          <select id="category-select" required>
+            <option value="">Select a category</option>
+          </select>
 
           <label for="word-input">Word:</label>
           <input
@@ -43,7 +52,7 @@
         <!-- Game Configuration Options -->
         <div class="game-options">
           <h3>Game Options</h3>
-          
+
           <div class="option-group">
             <label for="score-display">Score Display:</label>
             <select id="score-display" name="score-display">

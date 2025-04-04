@@ -7,7 +7,6 @@
     <style>
       body {
         display: flex;
-        
         justify-content: center;
         align-items: center;
         height: 100vh;
@@ -179,15 +178,6 @@
         createGameElements();
       });
 
-      if (!localStorage.getItem("categories")) {
-        const defaultCategories = {
-          Animals: ["Tiger", "Elephant", "Crocodile"],
-          Fruits: ["Apple", "Banana", "Mango"],
-          Colors: ["Red", "Blue", "Green"],
-        };
-        localStorage.setItem("categories", JSON.stringify(defaultCategories));
-      }
-
       const categories = JSON.parse(localStorage.getItem("categories")) || {};
 
       function createGameElements() {
@@ -264,6 +254,10 @@
 
       function handleDragEnd(event) {
         event.target.classList.remove("dragging");
+        // Ensure word is draggable again after being dropped incorrectly
+        if (event.target.classList.contains("incorrect")) {
+          event.target.setAttribute("draggable", true);
+        }
       }
 
       function handleDragOver(event) {
@@ -311,9 +305,19 @@
             !wordEl.classList.contains("placed")
           ) {
             wordEl.classList.add("placed");
-            wordEl.style.display = "none";
+            wordEl.style.display = "none"; // Hides the word after placing
           }
         });
+
+        // Allow the user to drag words back to fix mistakes
+        if (!isCorrect) {
+          const wordElement = document.querySelector(
+            `.draggable-word:contains('${droppedWord}')`
+          );
+          wordElement.style.display = "block"; // Make it visible again
+          wordElement.classList.remove("placed");
+          wordElement.setAttribute("draggable", true); // Re-enable dragging
+        }
 
         // Update score if in dynamic display mode
         if (scoreDisplayOption === "dynamic") {
