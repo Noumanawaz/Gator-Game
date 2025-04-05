@@ -119,12 +119,29 @@
         font-weight: bold;
       }
 
+      #timer {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
       #calculate-score-btn {
         margin-top: 30px;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+
+      .restart-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #f44336;
         color: white;
         border: none;
         border-radius: 4px;
@@ -151,31 +168,44 @@
       <div class="categories-section" id="categories-container"></div>
 
       <button id="calculate-score-btn">Calculate Score</button>
+      <button class="restart-btn" id="restart-btn">Restart Game</button>
+      <!-- Add new button to start a new game -->
+      <button
+        class="restart-btn"
+        id="new-game-btn"
+        style="background-color: #2196f3; margin-left: 10px"
+      >
+        Start New Game
+      </button>
       <div id="score">Score: 0</div>
+      <div id="timer">Time: 00:00</div>
     </div>
 
     <script>
       let score = 0;
       let correctDrops = []; // To track correct placements
+      let timer;
+      let timeLeft = 60; // Timer duration in seconds (60 seconds)
 
-      // Get the score display preference
       const scoreDisplayOption =
         localStorage.getItem("scoreDisplayOption") || "dynamic";
 
-      // Set initial UI based on score display preference
       document.addEventListener("DOMContentLoaded", function () {
-        // Show/hide score based on preference
         if (scoreDisplayOption === "end") {
           document.getElementById("score").classList.add("score-hidden");
         }
 
-        // Show/hide calculate button based on preference
         const calculateButton = document.getElementById("calculate-score-btn");
         if (scoreDisplayOption === "dynamic") {
           calculateButton.style.display = "none";
         }
 
         createGameElements();
+        startTimer(); // Start the timer when the game loads
+
+        document
+          .getElementById("restart-btn")
+          .addEventListener("click", restartGame);
       });
 
       const categories = JSON.parse(localStorage.getItem("categories")) || {};
@@ -206,7 +236,6 @@
           );
         }
 
-        // Shuffle words
         allWords.sort(() => 0.5 - Math.random());
 
         allWords.forEach(({ word, category }) => {
@@ -254,10 +283,6 @@
 
       function handleDragEnd(event) {
         event.target.classList.remove("dragging");
-        // Ensure word is draggable again after being dropped incorrectly
-        if (event.target.classList.contains("incorrect")) {
-          event.target.setAttribute("draggable", true);
-        }
       }
 
       function handleDragOver(event) {
@@ -292,7 +317,6 @@
           dropTarget.classList.add("incorrect");
         }
 
-        // Track the drop for end-of-game scoring
         correctDrops.push({
           word: droppedWord,
           isCorrect: isCorrect,
@@ -309,7 +333,6 @@
           }
         });
 
-        // Allow the user to drag words back to fix mistakes
         if (!isCorrect) {
           const wordElement = document.querySelector(
             `.draggable-word:contains('${droppedWord}')`
@@ -319,7 +342,6 @@
           wordElement.setAttribute("draggable", true); // Re-enable dragging
         }
 
-        // Update score if in dynamic display mode
         if (scoreDisplayOption === "dynamic") {
           updateScore();
         }
@@ -329,17 +351,53 @@
         document.getElementById("score").textContent = `Score: ${score}`;
       }
 
-      document
-        .getElementById("calculate-score-btn")
-        .addEventListener("click", () => {
-          // Only calculate the score when in 'end' mode
-          if (scoreDisplayOption === "end") {
-            // Show the previously hidden score element
-            const scoreElement = document.getElementById("score");
-            scoreElement.classList.remove("score-hidden");
-            scoreElement.textContent = `Score: ${score}`;
+      // Timer Functions
+      function startTimer() {
+        timer = setInterval(function () {
+          if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timer); // Stop the timer when time runs out
+            alert("Time's up! The game is over.");
+            // Optionally, end the game or show a restart button
           }
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById(
+          "timer"
+        ).textContent = `Time: ${minutes}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+      }
+      // Add event listener for the new game button
+      document
+        .getElementById("new-game-btn")
+        .addEventListener("click", function () {
+          // Clear categories and words from localStorage
+          localStorage.removeItem("categories");
+
+          // Clear any game state data
+          localStorage.removeItem("gameState");
+          localStorage.removeItem("scoreDisplayOption");
+
+          // Redirect to next.html
+          window.location.href = "next.html";
         });
+      function restartGame() {
+        timeLeft = 60; // Reset timer
+        score = 0;
+        correctDrops = [];
+        updateScore();
+        updateTimerDisplay();
+        createGameElements(); // Reinitialize game elements
+        clearInterval(timer);
+        startTimer(); // Restart the timer
+      }
     </script>
   </body>
 </html>
