@@ -98,29 +98,55 @@ function updateCategoriesList() {
 
   for (let category in categories) {
     const categoryItem = document.createElement("li");
+    categoryItem.className = "category-item";
 
-    // Make category name clickable and removable
-    const categoryText = document.createElement("span");
-    categoryText.textContent = `${category}: `;
-    categoryText.style.cursor = "pointer";
-    categoryText.addEventListener("click", function () {
+    // Container for category name and delete button
+    const categoryHeader = document.createElement("div");
+    categoryHeader.className = "category-header";
+    
+    // Category name
+    const categoryName = document.createElement("span");
+    categoryName.className = "category-name";
+    categoryName.textContent = category;
+    
+    // Delete button for category
+    const deleteCategory = document.createElement("button");
+    deleteCategory.className = "delete-btn";
+    deleteCategory.textContent = "Delete";
+    deleteCategory.addEventListener("click", function() {
       removeCategory(category);
     });
+    
+    categoryHeader.appendChild(categoryName);
+    categoryHeader.appendChild(deleteCategory);
+    categoryItem.appendChild(categoryHeader);
 
-    categoryItem.appendChild(categoryText);
-
+    // Words container
+    const wordsContainer = document.createElement("div");
+    wordsContainer.className = "words-container";
+    
     // Add words to the category
     categories[category].forEach(function (word) {
-      const wordItem = document.createElement("span");
-      wordItem.textContent = ` ${word}`;
-      wordItem.style.cursor = "pointer";
-      wordItem.addEventListener("click", function () {
+      const wordContainer = document.createElement("div");
+      wordContainer.className = "word-item";
+      
+      const wordText = document.createElement("span");
+      wordText.textContent = word;
+      
+      const deleteWord = document.createElement("button");
+      deleteWord.className = "delete-word-btn";
+      deleteWord.textContent = "×";
+      deleteWord.title = "Delete word";
+      deleteWord.addEventListener("click", function() {
         removeWord(category, word);
       });
-
-      categoryItem.appendChild(wordItem);
+      
+      wordContainer.appendChild(wordText);
+      wordContainer.appendChild(deleteWord);
+      wordsContainer.appendChild(wordContainer);
     });
 
+    categoryItem.appendChild(wordsContainer);
     categoriesList.appendChild(categoryItem);
   }
 }
@@ -140,10 +166,12 @@ function updateCategorySelect() {
 
 // Function to remove a category
 function removeCategory(category) {
-  delete categories[category];
-  localStorage.setItem("categories", JSON.stringify(categories));
-  updateCategoriesList(); // Update the displayed list after removal
-  updateCategorySelect(); // Update the category select dropdown after removal
+  if (confirm(`Are you sure you want to delete the category "${category}" and all its words?`)) {
+    delete categories[category];
+    localStorage.setItem("categories", JSON.stringify(categories));
+    updateCategoriesList(); // Update the displayed list after removal
+    updateCategorySelect(); // Update the category select dropdown after removal
+  }
 }
 
 // Function to remove a word from a category
